@@ -14,8 +14,14 @@ namespace Konvolucio.MUDS150628
     public class Iso15765NetwrorkLayer
     {
         public int ReadTimeoutMs { get; set; } = 2000;
-        public bool ParserLog { get; set; } = true;
+        public bool Log { get; set; } = true;
 
+        public string LogPath
+        {
+            get { return IoLog.Instance.FilePath; }
+            set { IoLog.Instance.FilePath = value; }
+        }
+            
         /// <summary>
         /// Block Size (BS)
         /// Ha 0, akkor megszakítás nélkül fogadhat.
@@ -96,7 +102,7 @@ namespace Konvolucio.MUDS150628
                     if (retryCount != MaxRetryCount-1)
                     {
                         retryCount++;
-                        if (ParserLog)
+                        if (Log)
                             IoLog.Instance.WirteLine("Retry, count:" + retryCount.ToString());
                     }
                     else
@@ -128,7 +134,7 @@ namespace Konvolucio.MUDS150628
                 offset++;
                 Buffer.BlockCopy(request, 0, frame, offset, request.Length);
                 _link.Write(frame);
-                if(ParserLog)
+                if(Log)
                     IoLog.Instance.WirteLine("TransmittRequest.N_PCItypeSingleFrame->Done");
             }
             else
@@ -144,12 +150,12 @@ namespace Konvolucio.MUDS150628
                 Buffer.BlockCopy(request, offset, frame, 2, 6);
                 offset += 6;
                 _link.Write(frame);
-                if (ParserLog)
+                if (Log)
                     IoLog.Instance.WirteLine("TransmittRequest.N_PCItypeFirstFrame->Read_N_PCItypeFlowControl.");
 
                 //Read FlowControl
                 _link.Read(out frame, flowControlTimeout);
-                if (ParserLog) IoLog.
+                if (Log) IoLog.
                         Instance.WirteLine("TransmittRequest.Read_N_PCItypeFlowControl->N_PCItypeConsecutiveFrame.");
                 if ((frame[0] & 0xF0) != N_PCItypeFlowControl)
                 {
@@ -179,7 +185,7 @@ namespace Konvolucio.MUDS150628
                             Buffer.BlockCopy(request, offset, frame, 1, 7);
                             offset += 7;
                             _link.Write(frame);
-                            if (ParserLog) 
+                            if (Log) 
                                 IoLog.Instance.WirteLine("TransmittRequest.N_PCItypeConsecutiveFrame->N_PCItypeConsecutiveFrame. Full Frame. New offset:" + offset);
                         }
                         else
@@ -187,7 +193,7 @@ namespace Konvolucio.MUDS150628
                             Buffer.BlockCopy(request, offset, frame, 1, request.Length - offset);
                             offset += request.Length - offset;
                             _link.Write(frame);
-                            if (ParserLog) 
+                            if (Log) 
                                 IoLog.Instance.WirteLine("TransmittRequest.N_PCItypeConsecutiveFrame->N_PCItypeConsecutiveFrame.");
                         }
 
@@ -196,7 +202,7 @@ namespace Konvolucio.MUDS150628
                             blockCnt++;
                             if (blockCnt >= blockSize)
                             {
-                                if (ParserLog) 
+                                if (Log) 
                                     IoLog.Instance.WirteLine("TransmittRequest.N_PCItypeFirstFrame->Read_N_PCItypeFlowControl.");
                                 _link.Read(out frame, flowControlTimeout);
                                 if ((frame[0] & 0xF0) != N_PCItypeFlowControl)
@@ -237,7 +243,7 @@ namespace Konvolucio.MUDS150628
                             length = buffer[0];
                             response = new byte[length];
                             Buffer.BlockCopy(buffer, 1, response, 0, length);
-                            if (ParserLog)
+                            if (Log)
                                 IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeSingleFrame -> Done.");
                             isDone = true;
                             break;
@@ -250,10 +256,10 @@ namespace Konvolucio.MUDS150628
                             offset = 0;
                             Buffer.BlockCopy(buffer, 2, response, offset, 6);
                             offset += 6;
-                            if (ParserLog)
+                            if (Log)
                                 IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeFirstFrame -> SendFlowControl.");
                             _link.Write(new byte[] { (N_PCItypeFlowControl), maxBlockSize, separationTime, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
-                            if (ParserLog) 
+                            if (Log) 
                                 IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeFirstFrame -> WaitFor:N_PCItypeConsecutiveFrame.");
                             isDone = false;
                             break;
@@ -286,7 +292,7 @@ namespace Konvolucio.MUDS150628
                             if ((length - offset) == 0)
                             {
                                 isDone = true;
-                                if (ParserLog) 
+                                if (Log) 
                                     IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeConsecutiveFrame -> Done");
                             }
                             else
@@ -297,23 +303,23 @@ namespace Konvolucio.MUDS150628
                                     if (blockCnt >= maxBlockSize)
                                     {  //Az adott blokkban már több frame nem lehet, most küldök egy FlowControl-t
                                         blockCnt = 0;
-                                        if (ParserLog) 
+                                        if (Log) 
                                             IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeFirstFrame -> SendFlowControl.");
                                         _link.Write(new byte[] { (N_PCItypeFlowControl), maxBlockSize, separationTime, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
-                                        if (ParserLog) 
+                                        if (Log) 
                                             IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeConsecutiveFrame -> WaitFor:N_PCItypeConsecutiveFrame.");
                                     }
                                     else
                                     {
                                         isDone = false;
-                                        if (ParserLog) 
+                                        if (Log) 
                                             IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeConsecutiveFrame -> WaitFor:N_PCItypeConsecutiveFrame.");
                                     }
                                 }
                                 else
                                 {
                                     isDone = false;
-                                    if (ParserLog) 
+                                    if (Log) 
                                         IoLog.Instance.WirteLine("ReceiveResponse.N_PCItypeConsecutiveFrame -> WaitFor:N_PCItypeConsecutiveFrame.");
                                 }
                             }

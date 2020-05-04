@@ -23,7 +23,7 @@
             canLink.Open();
 
             var network = new Iso15765NetwrorkLayer(canLink);
-            network.ParserLog = false;
+            network.Log = false;
             var dfu = new AppDfu(network);
             IoLog.Instance.FilePath = @"D:\io_log.txt";
             Console.WriteLine("LogPath:" + IoLog.Instance.FilePath);

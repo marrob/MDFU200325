@@ -61,10 +61,10 @@ namespace Konvolucio.MDFU200325.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Baudrate {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Baudrate {
             get {
-                return ((string)(this["Baudrate"]));
+                return ((decimal)(this["Baudrate"]));
             }
             set {
                 this["Baudrate"] = value;
@@ -80,6 +80,30 @@ namespace Konvolucio.MDFU200325.Properties {
             }
             set {
                 this["Address"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogEnable {
+            get {
+                return ((bool)(this["LogEnable"]));
+            }
+            set {
+                this["LogEnable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogPath {
+            get {
+                return ((string)(this["LogPath"]));
+            }
+            set {
+                this["LogPath"] = value;
             }
         }
     }

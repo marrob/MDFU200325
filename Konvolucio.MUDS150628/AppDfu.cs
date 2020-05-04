@@ -118,6 +118,7 @@ namespace Konvolucio.MUDS150628
                             Buffer.BlockCopy(firmware, dataPtr, block, 0, blockSize);
                             TransferData(blockSequenceCoutner, block);
                             dataPtr += blockSize;
+                            
                         }
                         else
                         {
@@ -126,6 +127,8 @@ namespace Konvolucio.MUDS150628
                             TransferData(blockSequenceCoutner, block);
                             dataPtr += firmware.Length - dataPtr;
                         }
+                        var precent = (int)(((double)dataPtr / firmware.Length) * 100.0);
+                        BackgroundWorker.ReportProgress(precent, "Status: " + firmware.Length.ToString() + "/" + dataPtr.ToString() + "byte");
 
                     } while (dataPtr != firmware.Length);
                 }

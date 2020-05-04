@@ -59,20 +59,50 @@ namespace Konvolucio.MDFU200325
                     System.Reflection.MethodBase.GetCurrentMethod().Name + "()");
             };
 
+         
+
             MainForm = new MainForm();
             MainForm.Text = AppConstants.SoftwareTitle;
 
-            
             MainForm.FileBrowseEventHandler += ButtonBrowse_Click;
             MainForm.FormClosed += MainForm_FormClosed;
             MainForm.WriteEventHandler += ButtonWrite_Click;
             MainForm.Shown += MainForm_Shown;
 
+            MainForm.DeviceRestart += MainForm_DeviceRestart;
+        }
+
+        private void MainForm_DeviceRestart(object sender, EventArgs e)
+        {
+            UInt32 baudRate = 250000;
+            NiCanInterface = new NiCanInterface("CAN0", baudRate);
+            NiCanInterface.Connect();
+            NiCanInterface.BusTerminationEnable = true;
+            NiCanInterface.Open();
+            NiCanInterface.RestartCard(MainForm.Address);
+            NiCanInterface.Close();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
             SyncContext = SynchronizationContext.Current;
+
+            MainForm.Address = (byte)Settings.Default.Address;
+            MainForm.LogEnable = Settings.Default.LogEnable;
+            MainForm.Baudrate = (uint)Settings.Default.Baudrate;
+
+            if (!string.IsNullOrWhiteSpace(Settings.Default.LastPath))
+                if(System.IO.File.Exists(Settings.Default.LastPath))
+                   MainForm.FileName = System.IO.Path.GetFileName(Settings.Default.LastPath);
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+            Settings.Default.Address = MainForm.Address;
+            Settings.Default.LogEnable = MainForm.LogEnable;
+            Settings.Default.Baudrate = MainForm.Baudrate;
+            Settings.Default.Save();
         }
 
         private void ButtonWrite_Click(object sender, EventArgs e)
@@ -93,8 +123,12 @@ namespace Konvolucio.MDFU200325
 
             var network = new Iso15765NetwrorkLayer(NiCanInterface);
             network.ReadTimeoutMs = 1000;
-            network.ParserLog = false;
+            network.Log = Settings.Default.LogEnable;
+            Settings.Default.LogPath  = AppConstants.LogPath + "_" + DateTime.Now.ToString(AppConstants.FileNameTimestampFormat) + ".txt";
+            network.LogPath = Settings.Default.LogPath;
+
             var dfu = new AppDfu(network);
+            
 
             dfu.ProgressChange += (o, ev) =>
             {
@@ -125,13 +159,7 @@ namespace Konvolucio.MDFU200325
 
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
 
-            
-
-            Settings.Default.Save();
-        }
 
         private void ButtonBrowse_Click(object sender, EventArgs e)
         {
@@ -146,6 +174,7 @@ namespace Konvolucio.MDFU200325
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Settings.Default.LastPath = ofd.FileName;
+                MainForm.FileName = System.IO.Path.GetFileName(Settings.Default.LastPath);
             }
         }
     }

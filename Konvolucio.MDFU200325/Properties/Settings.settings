@@ -11,11 +11,17 @@
     <Setting Name="ApplictionSettingsUpgradeCounter" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Baudrate" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Baudrate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Address" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LogEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LogPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
