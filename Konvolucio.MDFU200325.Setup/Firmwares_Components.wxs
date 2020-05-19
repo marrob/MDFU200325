@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <!-- This is how we include wxi files -->
+    <?include $(sys.CURRENTDIR)Config.wxi ?>
+
+    <ComponentGroup Id="Firmwares_Components">
+      <Component Id="FirmwareUpdateFiles" Directory="MyDocFirmwareUpdateFolder" Guid="{E0FF518B-72C3-4670-A263-69AB9B901345}">
+        <File Id = "MALT132_V009A.bin"       Source="$(var.FirmwareDirectory)MALT132_V009A.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MALT132_V009D.bin"       Source="$(var.FirmwareDirectory)MALT132_V009D.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MALT160T_V009A.bin"      Source="$(var.FirmwareDirectory)MALT160T_V009A.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MALT160T_V009D.bin"      Source="$(var.FirmwareDirectory)MALT160T_V009D.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MALT23THV_V009A.bin"     Source="$(var.FirmwareDirectory)MALT23THV_V009A.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MALT23THV_V009D.bin"     Source="$(var.FirmwareDirectory)MALT23THV_V009D.bin" KeyPath="no" Checksum="yes"/>
+        <File Id = "MDFU200325_V0001.bin"    Source="$(var.FirmwareDirectory)MDFU200325_V0001.bin" KeyPath="no" Checksum="yes"/>
+      </Component>
+    </ComponentGroup>
+
+  </Fragment>
+</Wix>
