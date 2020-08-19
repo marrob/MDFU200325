@@ -38,7 +38,7 @@
   <!--
   Global Paths.
   -->
-  <?define AppDirectory               = "..\Konvolucio.MDFU200325\bin\Release\"?>
+  <?define AppDirectory               = "..\Konvolucio.MDFU200325\bin\x86\Release"?>
   <?define AppResourceDirectory       = "..\Resources"?>
   <?define FirmwareDirectory          = "..\Resources\Firmwares\"?>
                                             

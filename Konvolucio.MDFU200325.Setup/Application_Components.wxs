@@ -19,7 +19,7 @@
           <Shortcut Id="_Konvolucio.MDFU200325.exe" Directory="AppProgramsFolder" WorkingDirectory="AppFolder" Icon="AppAddRemove.ico" Name="$(var.ProductName)" Advertise="yes" />
           <Shortcut Id="DesktopShortcut"    Directory="DesktopFolder"  WorkingDirectory = "AppFolder"  Icon="AppAddRemove.ico"  Name="$(var.ProductName)" Advertise="yes" />
         </File>
-        <File Name="Konvolucio.MUDS150628.dll" Source="$(var.AppDirectory)\Konvolucio.MUDS150628.dll" KeyPath="no" Checksum="yes"> </File>        
+        <File Name="Konvolucio.MUDS150628.dll" Source="$(var.AppDirectory)\Konvolucio.MUDS150628.dll" KeyPath="no" Checksum="yes"> </File>      
       </Component>
     </ComponentGroup>
   </Fragment>
