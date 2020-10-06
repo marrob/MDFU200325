@@ -20,7 +20,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Directories.wxs" />
-    <Compile Include="Application_Components.wxs" />
+    <Compile Include="Application_Dfu_Components.wxs" />
     <Compile Include="Firmwares_Components.wxs" />
     <Compile Include="Main.wxs" />
   </ItemGroup>
